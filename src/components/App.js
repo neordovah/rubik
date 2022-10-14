@@ -1,15 +1,36 @@
-import React from "react"
-import Header from "./Header"
-import Main from "./Main"
-import "../index.scss"
+import React, { useState } from "react"
+import pllCases from "./pllCases"
+import ollCases from "./ollCases"
+import CaseComponent from "./CaseComponent"
 
-export default function App() {
+export default function Main() {
 
-    
+    const Cases = [pllCases, ollCases]
+    let [page, setPage] = useState()
+
+    function handleClick(val) {
+
+        setPage(
+                <>
+                    <CaseComponent title={"edge"} cases={Cases[val]} value={val}/>
+                    <CaseComponent title={"corner"} cases={Cases[val]} value={val}/>
+                    <CaseComponent title={"edgeCorner"} cases={Cases[val]} value={val}/>
+                    <CaseComponent title={"cross"} cases={Cases[val]} value={val}/>
+                </>
+        )
+            
+    }
+
     return (
         <>
-            <Header />
-            <Main />
+            <header>
+                <button id="pll" onClick={() => handleClick(0)}>PLL</button>
+                <button id="oll" onClick={() => handleClick(1)}>OLL</button>
+                <button id="scrambles">SCRAMBLES</button>
+            </header>
+            <main>
+                {page}
+            </main>
         </>
     )
 }
