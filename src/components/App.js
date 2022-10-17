@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import pllCases from "./pllCases"
 import ollCases from "./ollCases"
 import CaseComponent from "./CaseComponent"
+import Timer from "./Timer"
 
 export default function Main() {
 
@@ -21,15 +22,22 @@ export default function Main() {
             
     }
 
+    function handleScrambles() {
+        /*setPage(
+            <Scramble />
+        )*/
+    }
+
     return (
         <>
             <header>
                 <button id="pll" onClick={() => handleClick(0)}>PLL</button>
                 <button id="oll" onClick={() => handleClick(1)}>OLL</button>
-                <button id="scrambles">SCRAMBLES</button>
+                <button id="scrambles" onClick={handleScrambles()}>SCRAMBLES</button>
             </header>
             <main>
                 {page}
+                {Timer()}
             </main>
         </>
     )

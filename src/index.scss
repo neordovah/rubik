@@ -43,8 +43,8 @@ main {
     flex-direction: column;
     background-color: bisque;
     min-height: 100%;
-    padding: 80px 10vw;
-    //margin-top: 80px;
+    padding: 80px 20vw 80px 10vw;
+    //position: relative;
     h1 {
         padding: 0;
         margin: 0;
@@ -68,8 +68,66 @@ main {
         color: black;
         text-shadow: 1px 1px 0 darkgray;
     }
-}
-
-.text {
-    overflow-wrap: anywhere;
+    #timer {
+        font-family: monospace;
+        position: fixed;
+        height: 300px;
+        width: 250px;
+        background-color: rgb(212, 173, 99);
+        bottom: 0;
+        right: 2.5vw;
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+        #timer-bar {
+            height: 22px;
+            width: 100%;
+            background-color: rgb(174, 114, 2);
+            #timer-minimise {
+                padding: 0;
+                height: 22px;
+                position: absolute;
+                right: 20px;
+                border: none;
+                background-color: transparent;
+                color: white;
+                font-size: 20px;
+                letter-spacing: -3px;
+            }
+        }
+        #timer-main {
+            /*display: flex;
+            flex-direction: column;
+            align-items: center;*/
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 0.25fr 0.25fr 1fr;
+            padding: 20px;
+            gap: 15px;
+            & > h1 {
+                font-size: 40px;
+                grid-column: 1 / -1;
+                text-align: center;
+            }
+            #timer-start {
+                grid-column: 1 / -1;
+            }
+            #timer-left {
+                #timer-stats {
+                    text-align: end;
+                }
+                #timer-buttons {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 5px;
+                    & > * {
+                        font-size: 10px;
+                    }
+                }
+            }
+            #timer-right {
+                background-color: whitesmoke;
+                border: solid 1px darkgrey;
+                overflow-y: scroll;
+            }
+        }
+    }
 }
