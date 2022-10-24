@@ -126,7 +126,7 @@ main {
             #timer-right {
                 background-color: whitesmoke;
                 border: solid 1px darkgrey;
-                overflow-y: scroll;
+                overflow: auto;
             }
         }
     }
