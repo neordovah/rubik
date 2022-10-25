@@ -12,6 +12,10 @@ body, html, #root {
     position: relative;
 }
 
+button {
+    cursor: pointer;
+}
+
 header {
     height: 80px;
     position: fixed;
@@ -127,6 +131,27 @@ main {
                 background-color: whitesmoke;
                 border: solid 1px darkgrey;
                 overflow: auto;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                height: 135px;
+                position: relative;
+                h1 {
+                    font-size: 14px;
+                    margin-bottom: 5px;
+                    margin-top: 5px;
+                }
+                p {
+                    padding: 0;
+                    margin: 2px;
+                }
+                .timerRightStat {
+                    display: flex;
+                    :first-child {
+                        position: absolute;
+                        left: 0;
+                    }
+                }
             }
         }
     }
