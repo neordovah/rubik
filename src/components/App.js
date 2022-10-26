@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import pllCases from "./pllCases"
 import ollCases from "./ollCases"
 import CaseComponent from "./CaseComponent"
@@ -11,8 +11,11 @@ export default function Main() {
     const Cases = [pllCases, ollCases]
     let [page, setPage] = useState()
     const ref = useRef(null)
-
     const [isTimerOn, setIsTimerOn] = useState(false)
+
+    useEffect(() => {
+        handleScrambles()
+    }, [])
 
     function handleClick(val) {
 
@@ -29,9 +32,10 @@ export default function Main() {
 
     function handleScrambles() {
         setPage(
-            <>
+            <div id="scrambles">
+            <h1>Scrambles</h1>
                 <Scrambles />
-            </>
+            </div>
         )
         
     }
@@ -48,10 +52,10 @@ export default function Main() {
             ref.current.style.backgroundColor = "green"
         }
     }
-
+//<button id="container" onKeyUp={handleTimerUp} onKeyDown={handleTimerDown} autoFocus></button>
     return (
         <>
-        <button id="container" onKeyUp={handleTimerUp} onKeyDown={handleTimerDown} autoFocus></button>
+        
             <header>
                 <button id="pll" onClick={() => handleClick(0)}>PLL</button>
                 <button id="oll" onClick={() => handleClick(1)}>OLL</button>

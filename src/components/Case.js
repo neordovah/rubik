@@ -5,7 +5,7 @@ export default function Case(props) {
         <div className="case">
             <h1 className="caseTitle">{props.name}</h1>
             <h2 className="caseCase">{props.case}</h2>
-            <img className="caseImg" src={props.img} height="70px" />
+            <div className="caseImage"><img className="caseImg" src={props.img} height="70px" /></div>
         </div>
     )
 }

@@ -99,7 +99,7 @@ const TimerMain = React.forwardRef((props, ref) => {
 
     return (
         <div id="timer-main" ref={ref}>
-                <h1>{minutes}:{seconds}</h1>
+                <h1>{Math.trunc(seconds/60)}:{Math.trunc(seconds%60)}</h1>
                 <button onClick={() => props.setIsTimerOn(prevTimerOn => !prevTimerOn)} id="timer-start">{!props.isTimerOn && "START" || "STOP"}</button>
                 <div id="timer-left">
                     <div id="timer-stats">
