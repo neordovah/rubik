@@ -2,11 +2,12 @@ import React, {useState, useEffect, useRef} from "react"
 import TimerMain from "./TimerMain"
 
 
-export default function Timer() {
+const Timer = React.forwardRef((props, ref) => {
 
     const [minimiseTimer, setMinimiseTimer] = useState(false)
     const mainRef = useRef(null)
     const timerRef = useRef(null)
+
 
     function minimiseFunction() {
         setMinimiseTimer(prevValue => !prevValue)
@@ -21,11 +22,13 @@ export default function Timer() {
 
     return (
         <div id="timer" ref={timerRef}>
-            <div id="timer-bar">
+            <div id="timer-bar" ref={ref}>
                 <button id="timer-minimise" onClick={minimiseFunction}>--</button>
             </div>
-            <TimerMain ref={mainRef} />
+            <TimerMain ref={mainRef} isTimerOn={props.isTimerOn} setIsTimerOn={props.setIsTimerOn}/>
         </div>
     )
-}
+})
+
+export default Timer
 //

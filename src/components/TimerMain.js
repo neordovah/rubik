@@ -1,19 +1,40 @@
 import React, {useState, useEffect, useRef} from "react"
 
-//export default function TimerMain(props) {
 const TimerMain = React.forwardRef((props, ref) => {
 
-    const [isTimerOn, setIsTimerOn] = useState(false)
     const [minutes, setMinutes] = useState(0)
     const [seconds, setSeconds] = useState(0)
     const [timerArray, setTimerArray] = useState([])
+    const [timerStats, setTimerStats] = useState([{"min": 0, "sec": 0, "sum": 0}, {"min": 0, "sec": 0, "sum": 0}, {"min": 0, "sec": 0, "sum": 0}, ])
 
+
+    function checkStats() {
+        if(timerArray.length > 0) {
+            let length = timerArray.length
+            let temp = [...timerStats]
+            let tempVar = Math.max(...timerArray.map(el => el.sum))
+            temp[1] = {"min": Math.trunc(tempVar/60), "sec": tempVar%60, "sum": tempVar}
+            tempVar = Math.min(...timerArray.map(el => el.sum))
+            temp[0] = {"min": Math.trunc(tempVar/60), "sec": tempVar%60, "sum": tempVar}
+            if(timerArray.length > 4) {
+                tempVar = timerArray[length-1].sum + timerArray[length-2].sum + timerArray[length-3].sum + timerArray[length-4].sum + timerArray[length-5].sum
+                tempVar = tempVar / 5
+                temp[2] = {"min": Math.trunc(tempVar/60), "sec": Math.trunc(tempVar%60), "sum": tempVar}
+            } else {
+                temp[2] = {"min": 0, "sec": 0, "sum": 0}
+            }
+            setTimerStats(temp)
+
+        } else {
+            setTimerStats([{"min": 0, "sec": 0, "sum": 0}, {"min": 0, "sec": 0, "sum": 0}, {"min": 0, "sec": 0, "sum": 0}])
+        }
+    }
 
     useEffect(() => {
         
         let interval = null
 
-        if(isTimerOn) {
+        if(props.isTimerOn) {
             setSeconds(0)
             setMinutes(0)
             interval = setInterval(() => {
@@ -27,23 +48,30 @@ const TimerMain = React.forwardRef((props, ref) => {
         else {
             if((minutes === 0) && (seconds === 0)) {
             } else {
-                setTimerArray([...timerArray, {"min": minutes, "sec": seconds}])
+                setTimerArray([...timerArray, {"min": minutes, "sec": seconds, "sum": minutes * 60 + seconds}])
+                
             }
             clearInterval(interval)
         }
         return () => clearInterval(interval)
-    }, [isTimerOn])
+    }, [props.isTimerOn])
 
     function timerRightArrayRender() {
-        timerArrayRendered = timerArray.reverse().map((element, index) => {
+
+        timerArrayRendered = timerArray.map((element, index) => {
             return (
                 <div className="timerRightStat">
-                    <p>{timerArray.length - index}.</p>
+                    <p>{index + 1}.</p>
                     <p>{element.min}:{element.sec}</p>
                 </div>
             )
         })
+        timerArrayRendered = timerArrayRendered.reverse()
     }
+
+    useEffect(() => {
+        checkStats()
+    }, [timerArray])
 
 
     let timerArrayRendered = []
@@ -57,27 +85,27 @@ const TimerMain = React.forwardRef((props, ref) => {
             temp.shift()
             setTimerArray([...temp])
             timerRightArrayRender()
+            checkStats()
         }
     }
 
     function reset() {
         setTimerArray([])
+        setTimerStats([{"min": 0, "sec": 0}, {"min": 0, "sec": 0}, {"min": 0, "sec": 0}])
+        setMinutes(0)
+        setSeconds(0)
         timerRightArrayRender()
     }
-    //console.log(props)
 
-    //let value = props.minimiseValue
-
-   // if(value === false) {
     return (
         <div id="timer-main" ref={ref}>
                 <h1>{minutes}:{seconds}</h1>
-                <button onClick={() => setIsTimerOn(prevTimerOn => !prevTimerOn)} id="timer-start">{!isTimerOn && "START" || "STOP"}</button>
+                <button onClick={() => props.setIsTimerOn(prevTimerOn => !prevTimerOn)} id="timer-start">{!props.isTimerOn && "START" || "STOP"}</button>
                 <div id="timer-left">
                     <div id="timer-stats">
-                        <p id="stats-best">Best: 0:0</p>
-                        <p id="stats-worst">Worst: 0:0</p>
-                        <p id="stats-avg">Avg-5: 0:0</p>
+                        <p id="stats-best">Best: {timerStats[0].min}:{timerStats[0].sec}</p>
+                        <p id="stats-worst">Worst: {timerStats[1].min}:{timerStats[1].sec}</p>
+                        <p id="stats-avg">Avg-5: {timerStats[2].min}:{timerStats[2].sec}</p>
                     </div>
                     <div id="timer-buttons">
                         <button id="timer-delete-last" onClick={deleteLast}>DELETE LAST</button>
