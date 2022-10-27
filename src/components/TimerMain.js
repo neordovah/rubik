@@ -4,20 +4,20 @@ const TimerMain = React.forwardRef((props, ref) => {
 
     const [minutes, setMinutes] = useState(0)
     const [seconds, setSeconds] = useState(0)
-    const [timerArray, setTimerArray] = useState([])
+    //const [timerArray, setTimerArray] = useState([])
     const [timerStats, setTimerStats] = useState([{"min": 0, "sec": 0, "sum": 0}, {"min": 0, "sec": 0, "sum": 0}, {"min": 0, "sec": 0, "sum": 0}, ])
 
 
     function checkStats() {
-        if(timerArray.length > 0) {
-            let length = timerArray.length
+        if(props.timerArray.length > 0) {
+            let length = props.timerArray.length
             let temp = [...timerStats]
-            let tempVar = Math.max(...timerArray.map(el => el.sum))
+            let tempVar = Math.max(...props.timerArray.map(el => el.sum))
             temp[1] = {"min": Math.trunc(tempVar/60), "sec": tempVar%60, "sum": tempVar}
-            tempVar = Math.min(...timerArray.map(el => el.sum))
+            tempVar = Math.min(...props.timerArray.map(el => el.sum))
             temp[0] = {"min": Math.trunc(tempVar/60), "sec": tempVar%60, "sum": tempVar}
-            if(timerArray.length > 4) {
-                tempVar = timerArray[length-1].sum + timerArray[length-2].sum + timerArray[length-3].sum + timerArray[length-4].sum + timerArray[length-5].sum
+            if(props.timerArray.length > 4) {
+                tempVar = props.timerArray[length-1].sum + props.timerArray[length-2].sum + props.timerArray[length-3].sum + props.timerArray[length-4].sum + props.timerArray[length-5].sum
                 tempVar = tempVar / 5
                 temp[2] = {"min": Math.trunc(tempVar/60), "sec": Math.trunc(tempVar%60), "sum": tempVar}
             } else {
@@ -48,7 +48,7 @@ const TimerMain = React.forwardRef((props, ref) => {
         else {
             if((minutes === 0) && (seconds === 0)) {
             } else {
-                setTimerArray([...timerArray, {"min": minutes, "sec": seconds, "sum": minutes * 60 + seconds}])
+                props.setTimerArray([...props.timerArray, {"min": Math.trunc(seconds/60), "sec": Math.trunc(seconds%60), "sum": minutes * 60 + seconds, "date": new Date().toLocaleDateString()}])
                 
             }
             clearInterval(interval)
@@ -58,7 +58,7 @@ const TimerMain = React.forwardRef((props, ref) => {
 
     function timerRightArrayRender() {
 
-        timerArrayRendered = timerArray.map((element, index) => {
+        timerArrayRendered = props.timerArray.map((element, index) => {
             return (
                 <div className="timerRightStat">
                     <p>{index + 1}.</p>
@@ -71,26 +71,26 @@ const TimerMain = React.forwardRef((props, ref) => {
 
     useEffect(() => {
         checkStats()
-    }, [timerArray])
+    }, [props.timerArray])
 
 
     let timerArrayRendered = []
-    if(timerArray.length > 0) {
+    if(props.timerArray.length > 0) {
         timerRightArrayRender()
     }
 
     function deleteLast() {
-        if(timerArray.length > 0) {
-            let temp = [...timerArray]
-            temp.shift()
-            setTimerArray([...temp])
+        if(props.timerArray.length > 0) {
+            let temp = [...props.timerArray]
+            temp.pop()
+            props.setTimerArray([...temp])
             timerRightArrayRender()
             checkStats()
         }
     }
 
     function reset() {
-        setTimerArray([])
+        props.setTimerArray([])
         setTimerStats([{"min": 0, "sec": 0}, {"min": 0, "sec": 0}, {"min": 0, "sec": 0}])
         setMinutes(0)
         setSeconds(0)

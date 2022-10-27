@@ -25,7 +25,7 @@ const Timer = React.forwardRef((props, ref) => {
             <div id="timer-bar" ref={ref}>
                 <button id="timer-minimise" onClick={minimiseFunction}>--</button>
             </div>
-            <TimerMain ref={mainRef} isTimerOn={props.isTimerOn} setIsTimerOn={props.setIsTimerOn}/>
+            <TimerMain ref={mainRef} isTimerOn={props.isTimerOn} setIsTimerOn={props.setIsTimerOn} timerArray={props.timerArray} setTimerArray={props.setTimerArray}/>
         </div>
     )
 })
