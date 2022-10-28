@@ -5,9 +5,12 @@ import CaseComponent from "./CaseComponent"
 import Timer from "./Timer"
 import Scrambles from "./Scrambles"
 import History from "./History"
+import setTheDate from "./setTheDate"
 
 let historyStats = []
+//const [historyStats, setHistoryStats] = []
 export default function Main() {
+    //console.log(localStorage)
 
     const Cases = [pllCases, ollCases]
     let [page, setPage] = useState()
@@ -21,15 +24,22 @@ export default function Main() {
 
     function removeFromHistoryArray() {
         let date = timerArrayCopy[timerArrayCopy.length-1].date
-        console.log(historyStats.length)
+        //console.log(historyStats.length)
         for(let i = 0; i < historyStats.length; i++) {
-            console.log(historyStats[i].date)
+            //console.log(historyStats[i].date)
             if(historyStats[i].date == date) {
                 historyStats[i].array.pop()
+                //let temp = historyStats[i].array
+                //temp = temp.pop()
+                //setHistoryStats({"date": date, "array": temp})
                 if((historyStats[i].array.length === 0) && (historyStats.length > 1)) {
                     historyStats.splice(i, 1)
+                    //let temp = historyStats
+                    //temp = temp.splice(i, 1)
+                    //setHistoryStats(temp)
                 } else if((historyStats[i].array.length === 0) && (historyStats.length === 1)) {
                     historyStats = []
+                    //setHistoryStats([])
                 }
             }
         }
@@ -38,9 +48,15 @@ export default function Main() {
         setTimerArrayCopy(temp)
     }
 
-    useEffect(() => {
+    const [date, setDate] = useState(new Date().toLocaleDateString())
+    setTheDate(date, setDate)
 
-        if ((timerArrayCopy.length > timerArray.length) && timerArray.length === 0) {
+    useEffect(() => {
+       // console.log("B")
+        if((!localStorage.stats) || (localStorage.stats === undefined)) {
+            localStorage.setItem('stats', JSON.stringify([]))
+        }
+        if((timerArrayCopy.length > timerArray.length) && timerArray.length === 0) {
             while(timerArrayCopy.length > 0) {
                 removeFromHistoryArray()
             }
@@ -53,34 +69,65 @@ export default function Main() {
             }
         } 
         if((timerArrayCopy.length < timerArray.length) || (timerArray.length === 0)) {
-            if(localStorage.stats && localStorage.stats.length > 0) {
-                historyStats = JSON.parse(localStorage.getItem("stats"));
+            if((localStorage.stats.length > 2)) {
+                console.log("empty")
+                console.log(localStorage.stats.length) ///////LENGTH = CATE CARACTERE SUNT [] = 2 !!
+                console.log(localStorage.stats)
+               historyStats = JSON.parse(localStorage.getItem("stats"));
+                //let temp
+               // temp = JSON.parse(localStorage.getItem("stats"))
+                //setHistoryStats(JSON.parse(localStorage.getItem("stats")))
+               // setHistoryStats(temp)
+                //console.log(historyStats)
             }
             if(timerArray.length > 0) {
 
                 if(historyStats.length === 0) {
-                    historyStats.push({"date": new Date().toLocaleDateString(), "array": [timerArray[0]]})
+                    historyStats.push({"date": date, "array": [timerArray[0]]})
+                    //let temp = historyStats
+                   // temp.push({"date": date, "array": [timerArray[0]]})
+                    //setHistoryStats(temp)
                 }
                 else {
-                    if(new Date().toLocaleDateString() === historyStats[historyStats.length-1].date) {
+                    if(date === historyStats[historyStats.length-1].date) {
                         historyStats[historyStats.length-1].array.push(timerArray[timerArray.length-1])
+                        //let temp = historyStats
+                        //temp = temp[temp.length-1].array.push(timerArray[timerArray.length-1])
+                       // setHistoryStats(temp)
                     }
                     else {
-                        historyStats.push({"date": new Date().toLocaleDateString(), "array": [timerArray[timerArray.length-1]]})
+                     historyStats.push({"date": date, "array": [timerArray[timerArray.length-1]]})
+                      // let temp = historyStats
+                       //temp.push({"date": date, "array": [timerArray[timerArray.length-1]]})
+                       //setHistoryStats(temp)
                     }
                 }
             }
             setTimerArrayCopy(timerArray)
         }
         localStorage.setItem('stats', JSON.stringify(historyStats))
-        console.log(historyStats)
+        //console.log(historyStats)
         
     }, [timerArray])
-    
+
+
+    useEffect(() => {
+        if(clickedHistory === 1) {
+            console.log("CHENAG")
+            console.log(historyStats)
+            //handleHistory()
+        }
+    }, [historyStats])
 
     useEffect(() => {
         handleScrambles()
     }, [])
+
+    useEffect(() => {
+        if(clickedHistory === 1) {
+            handleHistory()
+        }
+    }, [timerArray])
 
     function handleClick(val) {
         setClickedHistory(0)
@@ -119,8 +166,11 @@ export default function Main() {
 
     function handleDeleteHistory() {
         historyStats = []
+        //setHistoryStats([])
         localStorage.setItem('stats', JSON.stringify(historyStats))
     }
+
+
 
     function handleHistory() {
         setClickedHistory(1)
