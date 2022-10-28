@@ -4,14 +4,13 @@ import ollCases from "./ollCases"
 import CaseComponent from "./CaseComponent"
 import Timer from "./Timer"
 import Scrambles from "./Scrambles"
-import History from "./History"
+//import History from "./History"
 import setTheDate from "./setTheDate"
 
-let historyStats = []
-//const [historyStats, setHistoryStats] = []
-export default function Main() {
-    //console.log(localStorage)
+//let historyStats = []
 
+export default function Main() {
+    const [historyStats, setHistoryStats] = useState([])
     const Cases = [pllCases, ollCases]
     let [page, setPage] = useState()
     const ref = useRef(null)
@@ -20,26 +19,20 @@ export default function Main() {
     const [clickedHistory, setClickedHistory] = useState(0)
     const [timerArrayCopy, setTimerArrayCopy] = useState([])
     //localStorage.clear()
-   
 
-    function removeFromHistoryArray() {
+    /*function removeFromHistoryArray() {
         let date = timerArrayCopy[timerArrayCopy.length-1].date
-        //console.log(historyStats.length)
         for(let i = 0; i < historyStats.length; i++) {
-            //console.log(historyStats[i].date)
             if(historyStats[i].date == date) {
-                historyStats[i].array.pop()
-                //let temp = historyStats[i].array
-                //temp = temp.pop()
-                //setHistoryStats({"date": date, "array": temp})
-                if((historyStats[i].array.length === 0) && (historyStats.length > 1)) {
-                    historyStats.splice(i, 1)
-                    //let temp = historyStats
-                    //temp = temp.splice(i, 1)
-                    //setHistoryStats(temp)
-                } else if((historyStats[i].array.length === 0) && (historyStats.length === 1)) {
-                    historyStats = []
-                    //setHistoryStats([])
+                let temp = historyStats[i].array
+                temp = temp.pop()
+                setHistoryStats({"date": date, "array": temp})
+                if((historyStats[i].array.length === 0) && (historyStats.length > 0)) {  ////inlocuit aici si mai jos cu 0 ???
+                    let temp = historyStats
+                    temp = temp.splice(i, 1)
+                    setHistoryStats(temp)
+                } else if((historyStats[i].array.length === 0) && (historyStats.length === 0)) {
+                    setHistoryStats([])
                 }
             }
         }
@@ -48,11 +41,9 @@ export default function Main() {
         setTimerArrayCopy(temp)
     }
 
-    const [date, setDate] = useState(new Date().toLocaleDateString())
-    setTheDate(date, setDate)
+    const [date, setDate] = useState(new Date().toLocaleDateString())*/
 
-    useEffect(() => {
-       // console.log("B")
+   /* useEffect(() => {
         if((!localStorage.stats) || (localStorage.stats === undefined)) {
             localStorage.setItem('stats', JSON.stringify([]))
         }
@@ -67,67 +58,56 @@ export default function Main() {
             if(timerArrayCopy.length > 0) {
                 removeFromHistoryArray()
             }
+            localStorage.setItem('stats', JSON.stringify(historyStats))
         } 
         if((timerArrayCopy.length < timerArray.length) || (timerArray.length === 0)) {
-            if((localStorage.stats.length > 2)) {
-                console.log("empty")
-                console.log(localStorage.stats.length) ///////LENGTH = CATE CARACTERE SUNT [] = 2 !!
-                console.log(localStorage.stats)
-               historyStats = JSON.parse(localStorage.getItem("stats"));
-                //let temp
-               // temp = JSON.parse(localStorage.getItem("stats"))
-                //setHistoryStats(JSON.parse(localStorage.getItem("stats")))
-               // setHistoryStats(temp)
-                //console.log(historyStats)
+            console.log(localStorage.stats.length)
+            if(((localStorage.stats != "undefined") && localStorage.stats.length > 2)) {
+                let temp
+                temp = JSON.parse(localStorage.getItem("stats"))
+                console.log(temp)
+                setHistoryStats(temp)
+                //localStorage.setItem('stats', JSON.stringify(historyStats))
+                console.log(historyStats)
             }
-            if(timerArray.length > 0) {
-
+            if((timerArray.length > 0) ) {
                 if(historyStats.length === 0) {
-                    historyStats.push({"date": date, "array": [timerArray[0]]})
-                    //let temp = historyStats
-                   // temp.push({"date": date, "array": [timerArray[0]]})
-                    //setHistoryStats(temp)
+                    let temp = historyStats
+                    temp.push({"date": date, "array": [timerArray[0]]})
+                    setHistoryStats([...temp])
                 }
                 else {
-                    if(date === historyStats[historyStats.length-1].date) {
-                        historyStats[historyStats.length-1].array.push(timerArray[timerArray.length-1])
-                        //let temp = historyStats
-                        //temp = temp[temp.length-1].array.push(timerArray[timerArray.length-1])
-                       // setHistoryStats(temp)
-                    }
+                    if((historyStats.length > 0) && (date === historyStats[historyStats.length-1].date)) {
+                        let temp = historyStats
+                        temp[temp.length-1].array.push(timerArray[timerArray.length-1])
+                        console.log(temp)
+                        setHistoryStats([...temp])
+                    } 
                     else {
-                     historyStats.push({"date": date, "array": [timerArray[timerArray.length-1]]})
-                      // let temp = historyStats
-                       //temp.push({"date": date, "array": [timerArray[timerArray.length-1]]})
-                       //setHistoryStats(temp)
-                    }
+                       let temp = historyStats
+                       temp.push({"date": date, "array": [timerArray[timerArray.length-1]]})
+                       setHistoryStats([...temp])
+                    } 
                 }
+                localStorage.setItem('stats', JSON.stringify(historyStats))
             }
             setTimerArrayCopy(timerArray)
         }
-        localStorage.setItem('stats', JSON.stringify(historyStats))
-        //console.log(historyStats)
+        //localStorage.setItem('stats', JSON.stringify(historyStats))
         
-    }, [timerArray])
-
-
-    useEffect(() => {
-        if(clickedHistory === 1) {
-            console.log("CHENAG")
-            console.log(historyStats)
-            //handleHistory()
-        }
-    }, [historyStats])
+    }, [timerArray])*/
 
     useEffect(() => {
         handleScrambles()
     }, [])
 
-    useEffect(() => {
+    /*useEffect(() => {
         if(clickedHistory === 1) {
             handleHistory()
         }
-    }, [timerArray])
+    }, [historyStats])*/
+
+
 
     function handleClick(val) {
         setClickedHistory(0)
@@ -164,34 +144,35 @@ export default function Main() {
         }
     }
 
-    function handleDeleteHistory() {
-        historyStats = []
-        //setHistoryStats([])
-        localStorage.setItem('stats', JSON.stringify(historyStats))
-    }
+    /*function handleDeleteHistory() {
+        setHistoryStats([])
+        console.log("DELETED")
+        console.log("sters")
+        localStorage.setItem('stats', JSON.stringify([]))
+        console.log(localStorage.stats)
+    }*/
 
 
 
-    function handleHistory() {
+    /*function handleHistory() {
         setClickedHistory(1)
         
         setPage(
             <>
-                <History historyStats={historyStats}/>
+                <History historyStats={historyStats} setHistoryStats={setHistoryStats}/>
                 <button id="clearHistory" onClick={handleDeleteHistory}>CLEAR HISTORY</button>
             </>
         )
-    }
+    }*/
 
-//<button id="container" onKeyUp={handleTimerUp} onKeyDown={handleTimerDown} autoFocus></button>
     return (
         <>
-        
+            <button id="container" onKeyUp={handleTimerUp} onKeyDown={handleTimerDown} autoFocus></button>
             <header>
                 <button id="pll" onClick={() => handleClick(0)}>PLL</button>
                 <button id="oll" onClick={() => handleClick(1)}>OLL</button>
                 <button id="scrambles" onClick={handleScrambles}>SCRAMBLES</button>
-                <button id="history" onClick={handleHistory} historyStats={historyStats}>HISTORY</button>
+                
             </header>
             <main>
                 {page}
@@ -201,3 +182,4 @@ export default function Main() {
         </>
     )
 } 
+//<button id="history" onClick={handleHistory} historyStats={historyStats} setHistoryStats={setHistoryStats}>HISTORY</button>
